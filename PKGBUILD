@@ -5,7 +5,7 @@
 pkgbase=linux-wsl
 pkgver=4.19.84
 _srctag=${pkgver}-microsoft-standard
-pkgrel=1
+pkgrel=2
 pkgdesc='Linux Kernel for WSL2'
 url="https://docs.microsoft.com/en-us/windows/wsl/wsl2-index"
 arch=(x86_64)
@@ -13,14 +13,16 @@ license=(GPL2)
 makedepends=(
   bc kmod libelf
   xmlto python-sphinx python-sphinx_rtd_theme graphviz imagemagick
-  git
 )
 options=('!strip')
 _srcname="WSL2-Linux-Kernel"
 source=(
   "https://github.com/microsoft/${_srcname}/archive/${_srctag}.tar.gz"
+  "usbip.config"
 )
-sha256sums=('SKIP')
+sha256sums=('SKIP'
+  575c2bfc6d009a9c786c10b8ba6506c90feb481cb82b57f29df43e28e9ab4e39
+)
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
@@ -28,6 +30,7 @@ export KBUILD_BUILD_TIMESTAMP="$(date -Ru${SOURCE_DATE_EPOCH:+d @$SOURCE_DATE_EP
 
 prepare() {
   cd $srcdir/$_srcname-$_srctag
+  msg2 "Inside: $PWD"
 
   msg2 "Setting version..."
   scripts/setlocalversion --save-scmversion
@@ -45,6 +48,7 @@ prepare() {
 
   msg2 "Setting config..."
   cp ./Microsoft/config-wsl .config
+  patch .config $srcdir/usbip.config
   make olddefconfig
 
   make -s kernelrelease > version
@@ -180,7 +184,7 @@ _package-docs() {
 
   msg2 "Fixing permissions..."
   chmod -Rc u=rwX,go=rX "$pkgdir"
-
+}
 
 pkgname=("$pkgbase" "$pkgbase-headers" "$pkgbase-docs")
 for _p in "${pkgname[@]}"; do
