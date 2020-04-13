@@ -3,9 +3,9 @@
 
 
 pkgbase=linux-wsl
-pkgver=4.19.84
+pkgver=4.19.104
 _srctag=${pkgver}-microsoft-standard
-pkgrel=2
+pkgrel=1
 pkgdesc='Linux Kernel for WSL2'
 url="https://docs.microsoft.com/en-us/windows/wsl/wsl2-index"
 arch=(x86_64)
@@ -21,7 +21,7 @@ source=(
   "usbip.config"
 )
 sha256sums=('SKIP'
-  575c2bfc6d009a9c786c10b8ba6506c90feb481cb82b57f29df43e28e9ab4e39
+  829e698af1b7e56a7d896238b6e752ac41ff4eafbfa228323b2b0730931d784a
 )
 
 export KBUILD_BUILD_HOST=archlinux
